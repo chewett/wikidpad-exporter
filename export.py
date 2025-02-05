@@ -19,9 +19,21 @@ def convert_wikidpad_formatting_to_markdown(formatting, prefix):
         l = re.sub("\[([^]]*)]", "[[" + prefix_str + "\\1]]", l)
         l = re.sub("rel://([^ ]*)", "![](../assets/\\1)", l)
 
-        # Convert titles to markdown titles
-        if l.startswith("++ "):
+        # Parse and convert all the titles
+        if l.startswith("+++ "):
+            new_lines.append(l.replace("+++ ", "### "))
+        elif l.startswith("+++"):
+            new_lines.append(l.replace("+++", "### "))
+        elif l.startswith("++ "):
             new_lines.append(l.replace("++ ", "## "))
+        elif l.startswith("++"):
+            new_lines.append(l.replace("++", "## "))
+        elif l.startswith("+ "):
+            new_lines.append(l.replace("+ ", "# "))
+        elif l.startswith("+"):
+            new_lines.append(l.replace("+", "# "))
+
+
 
         # Turn on "table" mode and add the markdown table prefixes for the next rows
         elif l.startswith("<<|"):
